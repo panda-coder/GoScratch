@@ -1,0 +1,77 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build de binários
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            goos: linux
+            goarch: amd64
+            binary_suffix: linux-amd64
+          - os: windows-latest
+            goos: windows
+            goarch: amd64
+            binary_suffix: windows-amd64.exe
+          - os: macos-latest
+            goos: darwin
+            goarch: amd64
+            binary_suffix: darwin-amd64
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Testes automatizados
+        run: go test ./...
+
+      - name: Compilar binário
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+        run: |
+          go build -o goscratched-${{ matrix.binary_suffix }} .
+
+      - name: Publicar binário como artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: goscratched-${{ matrix.binary_suffix }}
+          path: goscratched-${{ matrix.binary_suffix }}
+
+  release:
+    name: Publicar release
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Baixar binários gerados
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: Publicar release com binários
+        uses: ncipollo/release-action@v1
+        with:
+          generateReleaseNotes: true
+          artifacts: "dist/*/*"

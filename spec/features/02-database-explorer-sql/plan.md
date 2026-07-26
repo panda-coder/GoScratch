@@ -3,6 +3,8 @@
 ## Arquitetura do Pacote `pkg/db`
 
 ```go
+package db
+
 type DriverType string
 
 const (
@@ -27,5 +29,10 @@ type ColumnMetadata struct {
 type TableMetadata struct {
 	Name    string           `json:"name"`
 	Columns []ColumnMetadata `json:"columns"`
+}
+
+type Explorer interface {
+	ListTables(conn ConnectionConfig) ([]TableMetadata, error)
+	ListColumns(conn ConnectionConfig, table string) ([]ColumnMetadata, error)
 }
 ```

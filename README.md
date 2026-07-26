@@ -34,3 +34,13 @@ Para quem quer testar uma regex, um algoritmo ou uma struct sem poluir o projeto
 Para quem precisa inspecionar retornos de APIs ou payloads JSON complexos de forma visual.
 
 Para quem quer um ambiente de aprendizado e prototipagem rápida no dia a dia com Go.
+
+🗺️ Futuras Features
+- Explorador de banco de dados SQL com inspeção de schema.
+- Query builder com sugestões contextuais.
+- Biblioteca de snippets reutilizáveis.
+- Visualizador estruturado de resultados.
+- Histórico de consultas SQL.
+- Inspetor dedicado de objetos em árvore.
+- Gerenciador de conexões de banco de dados.
+- Conexão e inspeção de chaves Redis.

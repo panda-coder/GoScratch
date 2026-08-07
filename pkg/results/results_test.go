@@ -10,7 +10,7 @@ func TestSimpleVisualizer_LoadAndSelect(t *testing.T) {
 	v := NewSimpleVisualizer()
 	rs := ResultSet{
 		Columns: []string{"id", "name"},
-		Rows: []Row{{"id": 1, "name": "a"}, {"id": 2, "name": "b"}},
+		Rows:    []Row{{"id": 1, "name": "a"}, {"id": 2, "name": "b"}},
 	}
 
 	require.NoError(t, v.Load(rs))

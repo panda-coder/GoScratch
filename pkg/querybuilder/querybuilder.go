@@ -1,5 +1,7 @@
 package querybuilder
 
+import "strings"
+
 // Auto-generated basic implementation based on spec/features/03-query-builder/plan.md
 
 type SuggestionKind string
@@ -38,8 +40,9 @@ func NewSimpleBuilder() Builder {
 
 func (s *simpleBuilder) Suggest(input string) []Suggestion {
 	var out []Suggestion
+	in := strings.ToUpper(strings.TrimSpace(input))
 	for _, k := range s.keywords {
-		if len(input) == 0 || len(k.Value) >= len(input) && k.Value[:len(input)] == input {
+		if in == "" || strings.HasPrefix(k.Value, in) {
 			out = append(out, k)
 		}
 	}
@@ -47,5 +50,5 @@ func (s *simpleBuilder) Suggest(input string) []Suggestion {
 }
 
 func (s *simpleBuilder) Build(parts []string) string {
-	return "" // noop for now
+	return strings.Join(parts, " ")
 }
